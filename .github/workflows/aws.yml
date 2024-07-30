@@ -1,4 +1,4 @@
-name: FullDeployment
+name: Create Env By Terraform
 
 on:
   push:
@@ -34,3 +34,32 @@ jobs:
       run: terraform apply --auto-approve
     - name: destroy terraform 
       run: terraform destroy --auto-approve
+
+name: Create Infrastructure by CloudFormation
+  on: 
+    push:
+      branches: [ "main" ]
+env:
+  AWS_REGION: ap-southeast-2                   
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: init terraform
+      run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
