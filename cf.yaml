@@ -31,6 +31,7 @@ Resources:
       InstanceType: t3.micro
       SecurityGroupIds: [!Ref InstanceSecurityGroup]
       SubnetId: !Ref SubnetInstanceID
+      KeyName: demoenv
       Tags:
       - Key: Instance
         Value: dc1WebServer
