@@ -94,7 +94,7 @@ resource "aws_instance" "vm" {
     tags = {
         server = "dc1-webserver"
     }
-    userdata = {
+    user_data = {
         apt update
         apt install nginx -y
         echo "Hi dc1" > /var/www/html/index.nginx-debian.html
