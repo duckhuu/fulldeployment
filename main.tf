@@ -90,8 +90,15 @@ resource "aws_instance" "vm" {
     ami = var.ami
     instance_type = var.instance-type
     vpc_security_group_ids = [ aws_security_group.security-group.id ]
+    key_name = "demoenv"
     tags = {
         server = "dc1-webserver"
+    }
+    userdata = {
+        apt update
+        apt install nginx -y
+        echo "Hi dc1" > /var/www/html/index.nginx-debian.html
+        /etc/init.d/nginx restart
     }
 
 }
