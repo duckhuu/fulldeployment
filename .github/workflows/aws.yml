@@ -35,7 +35,8 @@ jobs:
       run: terraform apply --auto-approve
     - name: destroy terraform 
       run: terraform destroy --auto-approve
-  CreateEnvByCloudFormation: 
+  CreateEnvByCloudFormation:
+    needs: CreateEnvTerraform 
     name: Create Env by CloudFormation
     runs-on: ubuntu-latest
     environment: production
@@ -48,5 +49,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-    - name: CloudFormation
+    - name: Create env by CloudFormation
       run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
+    - name: Delete env by Cloudformation
+      run: aws cloudformation delete-stack --stackname demoenv
