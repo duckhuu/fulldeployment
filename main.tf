@@ -4,14 +4,14 @@ terraform {
       key = "tfstate/terraform.tfstate"
       region = "ap-southeast-2"
       encrypt = true
-      profile = "dc1testing"
+#      profile = "dc1testing"
     }
 }
 
 provider "aws" {
     region =  var.aws-region
 
-    profile = "dc1testing"
+#    profile = "dc1testing"
 }
 
 
