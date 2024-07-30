@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Create Env By Terraform
     runs-on: ubuntu-latest
     environment: production
 
@@ -35,5 +35,17 @@ jobs:
       run: terraform apply --auto-approve
     - name: destroy terraform 
       run: terraform destroy --auto-approve
+    name: Create Env by CloudFormation
+      runs-on: ubuntu-latest
+      environments: production
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
     - name: CloudFormation
       run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
