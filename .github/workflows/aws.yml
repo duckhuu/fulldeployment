@@ -1,4 +1,4 @@
-name: TestingDeployment
+name: FullDeployment
 
 on:
   push:
@@ -32,3 +32,5 @@ jobs:
       run: terraform plan
     - name: apply terraform
       run: terraform apply --auto-approve
+    - name: destroy terraform 
+      run: terraform destroy --auto-approve
