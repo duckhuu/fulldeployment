@@ -94,12 +94,12 @@ resource "aws_instance" "vm" {
     tags = {
         server = "dc1-webserver"
     }
-    user_data = {
+    user_data = <<EOF
         apt update
         apt install nginx -y
         echo "Hi dc1" > /var/www/html/index.nginx-debian.html
         /etc/init.d/nginx restart
-    }
+    EOF
 
 }
 
