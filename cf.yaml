@@ -1,0 +1,136 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Testing template 
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 11.11.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+      - Key: VPC
+        Value: Test_VPC
+  
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: InternetGateway
+        Value: InternetGateway
+        
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+      
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-03f0544597f43a91d
+      InstanceType: t3.micro
+      SecurityGroupIds: [!Ref InstanceSecurityGroup]
+      SubnetId: !Ref SubnetInstanceID
+      Tags:
+      - Key: Instance
+        Value: dc1WebServer
+        
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: SecurityGroupTesting
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+      - Key: SG
+        Value: SGTesting     
+        
+  VPCIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: "0.0.0.0/0"
+#      SourceSecurityGroupId: 
+#        Fn::GetAtt:
+#          - InstanceSecurityGroup
+#          - GroupId
+      GroupId: !Ref InstanceSecurityGroup
+#        Fn::GetAtt:
+#          - InstanceSecurityGroup
+#          - GroupId
+
+  VPCEGress:  
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: "0.0.0.0/0"
+#      DestinationSecurityGroupId:
+#        Fn::GetAtt:
+#          - InstanceSecurityGroup
+#          - GroupId
+      GroupId: !Ref InstanceSecurityGroup
+#        Fn::GetAtt:
+#          - InstanceSecurityGroup
+#          - GroupId
+        
+  SubnetInstanceID:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 11.11.11.0/24
+      AvailabilityZone: "ap-southeast-2a"
+      Tags:
+      - Key: Subnet
+        Value: InstanceSubnet
+        
+  SubnetDatabaseID:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 11.11.12.0/24
+      AvailabilityZone: "ap-southeast-2b"
+      Tags:
+      - Key: Subnet
+        Value: DatabaseSubnet
+        
+  SubnetDatabase:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: DatabaseSubnet
+      DBSubnetGroupDescription: TestingDatabaseSubnet
+      SubnetIds: [ !Ref SubnetDatabaseID, !Ref SubnetInstanceID ]
+      Tags:
+      - Key: dbsubnet
+        Value: DatabaseSubnet
+        
+  DatabaseInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: '100'
+      VPCSecurityGroups: [!Ref InstanceSecurityGroup]
+      DBSubnetGroupName: !Ref SubnetDatabase
+      DBName: testingdatabase
+#      AutomaticBackupReplicationRegion: "ap-northeast-1"
+#      BackupRetentionPeriod: 1
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      Iops: 1000
+      MasterUsername: "dc1testing"
+      MasterUserPassword: "dc1testing"
+      StorageType: IO1
+      Tags:
+      - Key: Database
+        Value: TestingDatabase
