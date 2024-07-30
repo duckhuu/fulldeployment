@@ -33,6 +33,8 @@ jobs:
       run: terraform plan
     - name: apply terraform
       run: terraform apply --auto-approve
+    - name: run unit test
+      run: sleep 60
     - name: destroy terraform 
       run: terraform destroy --auto-approve
   CreateEnvByCloudFormation:
@@ -50,6 +52,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     - name: Create env by CloudFormation
-      run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
+      run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv --describe-stack-events --stack-name demoenv
     - name: Delete env by Cloudformation
-      run: aws cloudformation delete-stack --stackname demoenv
+      run: aws cloudformation delete-stack --stack-name demoenv
