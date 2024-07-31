@@ -7,9 +7,9 @@ on:
 
 env:
   AWS_REGION: ap-southeast-2
-  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
-  HOSTNAME: ${{ secrets.SSH_HOST}}
-  USER_NAME: ${{ secrets.SSH_USER_NAME}}
+  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  HOSTNAME: ${{ secrets.SSH_HOST }}
+  USER_NAME: ${{ secrets.SSH_USER_NAME }}
 
 permissions:
   contents: read
