@@ -123,7 +123,7 @@ resource "aws_instance" "vm" {
     ami = var.ami
     instance_type = var.instance-type
     vpc_security_group_ids = [ aws_security_group.security-group.id ]
-    key_name = "demopemkey"
+    key_name = "demoenv"
     user_data = "${file("install_nginx.sh")}"
     tags = {
         server = "dc1-webserver"
