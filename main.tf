@@ -29,6 +29,28 @@ resource "aws_internet_gateway" "internet-gateway" {
     }
 }
 
+resource "aws_route_table" "vpc-route" {
+    vpc_id = aws_vpc.tf-testing-vpc.id
+    route {
+        cidr_block = "12.12.0.0/16"
+        gateway_id = "local"
+    }
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.internet-gateway.id
+    }
+}
+
+resource "aws_route_table_association" "vpc-route-associate" {
+    subnet_id = aws_subnet.testing-subnet.id
+    route_table_id = aws_route_table.vpc-route.id
+}
+
+resource "aws_route_table_association" "vpc-route-associate-2" {
+    subnet_id = aws_subnet.testing-subnet-2.id
+    route_table_id = aws_route_table.vpc-route.id
+}
+
 resource "aws_security_group" "security-group" {
     vpc_id = aws_vpc.tf-testing-vpc.id
     name = "securitygroup-testing"
@@ -38,11 +60,17 @@ resource "aws_security_group" "security-group" {
         from_port = 80
         to_port = 80
     }
+    ingress {
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+        from_port = 22
+        to_port = 22
+    }
     egress {
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
-        from_port = 80
-        to_port = 80
+        from_port = 0
+        to_port = 65535
     }
     tags = {
         security-group = "dc1-security-group"
@@ -85,21 +113,21 @@ resource "aws_subnet" "testing-subnet-2" {
   
 }
 
+resource "aws_eip" "elastic-ip" {
+    domain = "vpc"
+    instance = aws_instance.vm.id 
+}
+
 resource "aws_instance" "vm" {
     subnet_id = aws_subnet.testing-subnet.id
     ami = var.ami
     instance_type = var.instance-type
     vpc_security_group_ids = [ aws_security_group.security-group.id ]
-    key_name = "demoenv"
+    key_name = "testingkey"
+    user_data = "${file("install_nginx.sh")}"
     tags = {
         server = "dc1-webserver"
     }
-    user_data = <<EOF
-        apt update
-        apt install nginx -y
-        echo "Hi dc1" > /var/www/html/index.nginx-debian.html
-        /etc/init.d/nginx restart
-    EOF
 
 }
 
