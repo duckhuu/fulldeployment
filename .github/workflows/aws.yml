@@ -42,9 +42,9 @@ jobs:
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-        echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
-        curl ${HOSTNAME}
-        '
+          echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
+          curl ${HOSTNAME}
+          '
     - name: destroy terraform 
       run: terraform destroy --auto-approve
   CreateEnvByCloudFormation:
