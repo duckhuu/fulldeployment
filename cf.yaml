@@ -23,7 +23,45 @@ Resources:
     Properties:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
-      
+  
+  EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance
+  
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: VPC
+      Tags:
+      - Key: route
+        Value: vpcroute
+
+  CarrierRoute:
+    Type: AWS::EC2::Route
+    Properties:
+       RouteTableId:
+         Ref: RouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: InternetGateway  
+  
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: SubnetInstanceID
+      RouteTableId:
+        Ref: RouteTable
+
+  SubnetRouteTableAssociationDatabase:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: SubnetDatabaseID
+      RouteTableId:
+        Ref: RouteTable
   Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -34,10 +72,10 @@ Resources:
       KeyName: demoenv
       UserData: 
         Fn::Base64: !Sub |
-             #!/bin/bash
-             apt update 
-             apt install nginx -y
-             /etc/init.d/nginx restart
+              #! /bin/bash
+              sudo apt-get update
+              sudo apt-get install nginx -y
+              echo "<h1>Hi DC1-This is Github Action Pipeline</h1>" | sudo tee /var/www/html/index.nginx-debian.html
       Tags:
       - Key: Instance
         Value: dc1WebServer
@@ -51,6 +89,11 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: tcp
