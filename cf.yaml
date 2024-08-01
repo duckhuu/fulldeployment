@@ -185,6 +185,16 @@ Resources:
       - Key: Database
         Value: TestingDatabase
 Outputs:
-  StackEIP:
-    Description: Return public EIP
+  StackVPC:
+    Description: Return VPC
     Value: !Ref VPC
+  StackEIPGeneral:
+    Description: Return EIP General
+    Value: !Ref EIP
+  StackEIP:
+    Description: Return EIP 
+    Value: !GetAtt EIP.public_ip
+  StackEIPDNS:
+    Description: Return EIP 
+    Value: !GetAtt EIP.public_dns
+  
