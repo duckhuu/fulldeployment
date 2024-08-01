@@ -38,6 +38,8 @@ jobs:
       run: terraform apply --auto-approve
     - name: get terraform raw output
       run: terraform output -raw eip-public-ip
+    - name: update public ip to github secret
+      run: echo ip=$(terraform output -raw eip-public-ip) > ${{ secrets.SSH_HOST }}
  #   - name: run unit test
  #     run: sleep 60
     - name: deploy code 
