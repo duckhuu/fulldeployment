@@ -194,7 +194,5 @@ Outputs:
   StackEIP:
     Description: Return EIP 
     Value: !GetAtt EIP.public_ip
-  StackEIPDNS:
-    Description: Return EIP 
-    Value: !GetAtt EIP.public_dns
+
   
