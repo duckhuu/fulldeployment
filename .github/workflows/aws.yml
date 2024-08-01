@@ -47,8 +47,9 @@ jobs:
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@$ip '
           echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
-          curl $ip
         '
+    - name: testing site 
+      run: curl http://$ip
     - name: destroy terraform 
       run: terraform destroy --auto-approve
   CreateEnvByCloudFormation:
