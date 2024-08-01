@@ -39,15 +39,15 @@ jobs:
     - name: get terraform raw output
       run: terraform output -raw eip-public-ip
     - name: update public ip to github secret
-      run: echo ip=$(terraform output -raw eip-public-ip) > ${{ secrets.SSH_HOST }}
+      run: echo ip=$(terraform output -raw eip-public-ip) >> $GITHUB_ENV
  #   - name: run unit test
  #     run: sleep 60
     - name: deploy code 
       run: |
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-        ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@$ip '
           echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
-          curl ${HOSTNAME}
+          curl $ip
         '
     - name: destroy terraform 
       run: terraform destroy --auto-approve
