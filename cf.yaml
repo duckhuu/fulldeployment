@@ -185,9 +185,9 @@ Resources:
       - Key: Database
         Value: TestingDatabase
 Outputs:
-  StackVPC:
-    Description: Return VPC
-    Value: !Ref VPC
+  #StackVPC:
+    #Description: Return VPC
+    #Value: !Ref VPC
   StackEIPGeneral:
     Description: Return EIP General
     Value: !Ref EIP
