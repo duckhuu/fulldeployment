@@ -193,6 +193,6 @@ Outputs:
     Value: !Ref EIP
   StackEIP:
     Description: Return EIP 
-    Value: !GetAtt EIP.public_ip
+    Value: !GetAtt EIP.PublicIp
 
   
