@@ -69,7 +69,7 @@ jobs:
     - name: Create env by CloudFormation
       run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv 
     - name: Get Cloudformation Output EIP 
-      run: echo cip=$(aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[0].Outputs[?OutputKey==StackEIP].OutputValue' --output text) >>GITHUB_ENV
+      run: echo cip=$(aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[0].Outputs[?OutputKey==StackEIP].OutputValue' --output text) >> $GITHUB_ENV
     - name: testing site that created by cloudformation
       run: curl http://$cip
     - name: Describe stack events  
