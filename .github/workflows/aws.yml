@@ -72,8 +72,8 @@ jobs:
       run: aws cloudformation describe-stacks --region ap-southeast-2 --query 'Stacks[?StackName==`demoenv`][].Outputs[?OutputKey==`StackEIPGeneral`].OutputValue' --output text
     - name: Get Cloudformation Output EIP 
       run: echo cip=$(aws cloudformation describe-stacks --region ap-southeast-2 --query 'Stacks[?StackName==`demoenv`][].Outputs[?OutputKey==`StackEIPGeneral`].OutputValue' --output text) >> $GITHUB_ENV
- #   - name: testing site that created by cloudformation
- #     run: curl http://$cip
+    - name: testing site that created by cloudformation
+      run: curl http://$cip
     - name: Describe stack events  
       run: aws cloudformation describe-stack-events --stack-name demoenv
     - name: sleep 
