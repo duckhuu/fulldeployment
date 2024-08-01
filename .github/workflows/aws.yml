@@ -48,7 +48,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@$ip '
           echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
         '
-    - name: testing site 
+    - name: testing site that created by terraform
       run: curl http://$ip
     - name: destroy terraform 
       run: terraform destroy --auto-approve
@@ -70,6 +70,8 @@ jobs:
       run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv 
     - name: Get Cloudformation Output EIP 
       run: echo cip=$(aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[0].Outputs[?OutputKey==StackEIP].OutputValue' --output text) >>GITHUB_ENV
+    - name: testing site that created by cloudformation
+      run: curl http://$cip
     - name: Describe stack events  
       run: aws cloudformation describe-stack-events --stack-name demoenv
     - name: sleep 
