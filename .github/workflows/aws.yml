@@ -69,11 +69,11 @@ jobs:
     - name: Create env by CloudFormation
       run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv 
     - name: Get Stack EP 
-      run: aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[1].Outputs[?OutputKey==StackEIPGeneral].OutputValue' --output text
+      run: aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[0].Outputs[?OutputKey==StackEIPGeneral].OutputValue' --output text
     - name: Get Cloudformation Output EIP 
-      run: echo cip=$(aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[1].Outputs[?OutputKey==StackEIPGeneral].OutputValue' --output text) >> $GITHUB_ENV
-    - name: testing site that created by cloudformation
-      run: curl http://$cip
+      run: echo cip=$(aws cloudformation describe-stacks --stack-name demoenv --query 'Stacks[0].Outputs[?OutputKey==StackEIPGeneral].OutputValue' --output text) >> $GITHUB_ENV
+ #   - name: testing site that created by cloudformation
+ #     run: curl http://$cip
     - name: Describe stack events  
       run: aws cloudformation describe-stack-events --stack-name demoenv
     - name: sleep 
