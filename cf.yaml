@@ -184,3 +184,7 @@ Resources:
       Tags:
       - Key: Database
         Value: TestingDatabase
+Outputs:
+  StackEIP:
+    Description: Return public EIP
+    Value: !Ref VPC
