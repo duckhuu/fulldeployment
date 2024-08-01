@@ -37,7 +37,7 @@ jobs:
     - name: apply terraform
       run: terraform apply --auto-approve
     - name: get terraform raw output
-      run: terraform output -raw aws_eip.elastic-ip.public_ip
+      run: terraform output -raw eip-public-ip
  #   - name: run unit test
  #     run: sleep 60
     - name: deploy code 
