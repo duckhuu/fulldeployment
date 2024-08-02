@@ -42,7 +42,7 @@ jobs:
       run: echo ip=$(terraform output -raw eip-public-ip) >> $GITHUB_ENV
  #   - name: run unit test
  #     run: sleep 60
-    - name: deploy code 
+    - name: deploy code to terraform environment
       run: |
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@$ip '
@@ -72,6 +72,12 @@ jobs:
       run: aws cloudformation describe-stacks --region ap-southeast-2 --query 'Stacks[?StackName==`demoenv`][].Outputs[?OutputKey==`StackEIPGeneral`].OutputValue' --output text
     - name: Get Cloudformation Output EIP 
       run: echo cip=$(aws cloudformation describe-stacks --region ap-southeast-2 --query 'Stacks[?StackName==`demoenv`][].Outputs[?OutputKey==`StackEIPGeneral`].OutputValue' --output text) >> $GITHUB_ENV
+    - name: deploy code to cloudformation environment
+      run: |
+        echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@$cip '
+          echo "<h1>Hi DC1 -- This is Github Action Pipeline --- This is latest code</h1>" | sudo tee /var/www/html/index.nginx-debian.html
+        '
     - name: testing site that created by cloudformation
       run: curl http://$cip
     - name: Describe stack events  
