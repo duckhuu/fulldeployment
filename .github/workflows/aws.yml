@@ -1,5 +1,5 @@
 name: Full Deployment
-run-name: Create Env by Terraform
+run-name: Create Env and Run Deployment via TF and CF
 
 on:
   push:
@@ -40,8 +40,6 @@ jobs:
       run: terraform output -raw eip-public-ip
     - name: update public ip to github secret
       run: echo ip=$(terraform output -raw eip-public-ip) >> $GITHUB_ENV
- #   - name: run unit test
- #     run: sleep 60
     - name: deploy code to terraform environment
       run: |
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
@@ -82,7 +80,5 @@ jobs:
       run: curl http://$cip
     - name: Describe stack events  
       run: aws cloudformation describe-stack-events --stack-name demoenv
-    - name: sleep 
-      run: sleep 30
     - name: Delete env by Cloudformation
       run: aws cloudformation delete-stack --stack-name demoenv
