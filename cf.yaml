@@ -4,7 +4,7 @@ Description: Testing template
 Parameters:
   UserData:
     Type: String
-    Default: install_nginx.sh
+    Default: $(base64 -w0 install_nginx.sh)
 
 Resources:
   VPC:
