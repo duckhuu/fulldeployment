@@ -1,5 +1,15 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Testing template 
+
+Parameters:
+  UserData:
+  Type: String
+    Fn::Base64: !Sub |
+      #! /bin/bash
+      sudo apt-get update
+      sudo apt-get install nginx -y
+      echo "<h1>Hi DC1-This is Github Action Pipeline</h1>" | sudo tee /var/www/html/index.nginx-debian.html
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -77,12 +87,12 @@ Resources:
       SecurityGroupIds: [!Ref InstanceSecurityGroup]
       SubnetId: !Ref SubnetInstanceID
       KeyName: !Ref KeyPair
-      UserData: 
-        Fn::Base64: !Sub |
-              #! /bin/bash
-              sudo apt-get update
-              sudo apt-get install nginx -y
-              echo "<h1>Hi DC1-This is Github Action Pipeline</h1>" | sudo tee /var/www/html/index.nginx-debian.html
+      UserData: !Ref UserData
+#        Fn::Base64: !Sub |
+#              #! /bin/bash
+#              sudo apt-get update
+#              sudo apt-get install nginx -y
+#              echo "<h1>Hi DC1-This is Github Action Pipeline</h1>" | sudo tee /var/www/html/index.nginx-debian.html
       Tags:
       - Key: Instance
         Value: dc1WebServer
