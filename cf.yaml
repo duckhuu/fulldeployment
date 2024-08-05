@@ -4,6 +4,7 @@ Description: Testing template
 Parameters:
   UserData:
     Type: String
+    Default: IyEgL2Jpbi9iYXNoCnN1ZG8gYXB0LWdldCB1cGRhdGUKc3VkbyBhcHQtZ2V0IGluc3RhbGwgbmdpbnggLXkKZWNobyAiPGgxPkhpIERDMS1UaGlzIGlzIEdpdGh1YiBBY3Rpb24gUGlwZWxpbmU8L2gxPiIgfCBzdWRvIHRlZSAvdmFyL3d3dy9odG1sL2luZGV4Lm5naW54LWRlYmlhbi5odG1s
 
 Resources:
   VPC:
