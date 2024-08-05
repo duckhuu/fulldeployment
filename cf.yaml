@@ -4,7 +4,7 @@ Description: Testing template
 Parameters:
   UserData:
     Type: String
-    Default: file://install_nginx.sh
+    Default: ${file("install_nginx.sh")}
 
 Resources:
   VPC:
