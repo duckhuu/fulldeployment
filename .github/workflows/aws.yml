@@ -4,12 +4,15 @@ run-name: Create Env and Run Deployment via TF and CF
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 env:
   AWS_REGION: ap-southeast-2
   PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   HOSTNAME: ${{ secrets.SSH_HOST }}
   USER_NAME: ${{ secrets.SSH_USER_NAME }}
+  FORCE_COLOR: true 
 
 permissions:
   contents: read
