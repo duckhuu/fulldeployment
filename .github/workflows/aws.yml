@@ -2,11 +2,11 @@ name: Full Deployment
 run-name: Create Env and Run Deployment via TF and CF
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+  workflow_dispatch: 
 env:
   AWS_REGION: ap-southeast-2
   PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
