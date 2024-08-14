@@ -35,8 +35,8 @@ jobs:
       - image: cimg/aws:2024.03
     steps:
       - checkout
-      - run: "update access key id"
-          name: 
+      - run:
+          name: "update access key id"
           command: aws configuration set aws_access_key_id $aws_access_key
       - run: 
           name: "update secret id"
