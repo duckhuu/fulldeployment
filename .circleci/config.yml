@@ -30,6 +30,23 @@ jobs:
       - run:
           name: "run terraform version"
           command: terraform --version
+  aws_configuration:
+    docker:
+      - image: cimg/aws:2024.03
+    steps:
+      - checkout
+      - run: "update access key id"
+          name: 
+          command: aws configuration set aws_access_key_id $aws_access_key
+      - run: 
+          name: "update secret id"
+          command: aws configuration set aws_secret_access_key $aws_secret_access_key
+      - run: "update region"
+          name: 
+          command: aws configuration set default.region $aws_default_region
+      - run: 
+          name: "create env with cloud formation stack "
+          command: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
@@ -37,4 +54,4 @@ workflows:
   create-infrastructure: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - terraform
+      - aws_configuration
