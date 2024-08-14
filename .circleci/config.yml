@@ -41,11 +41,11 @@ jobs:
       - run: 
           name: "update secret id"
           command: aws configuration set aws_secret_access_key $aws_secret_access_key
-      - run: "update region"
-          name: 
+      - run:
+          name: "update region"
           command: aws configuration set default.region $aws_default_region
       - run: 
-          name: "create env with cloud formation stack "
+          name: "create env with cloud formation stack"
           command: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
 
 # Orchestrate jobs using workflows
