@@ -218,8 +218,10 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: 
-                  "s3:*"
+                [
+                  "s3:*",
                   "s3-object-lambda: *"
+                ]
                 Resource: '*'
         - PolicyName: s3_fullaccess
           PolicyDocument:
