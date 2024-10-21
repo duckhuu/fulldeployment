@@ -162,13 +162,20 @@ resource "aws_db_instance" "database" {
 
 }
 
+data "archive_file" "lambda" {
+  type        = "zip"
+  source_file = "lambda.js"
+  output_path = "lambda_function_payload.zip"
+}
+
 resource "aws_lambda_function" "lambda_function" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
     filename      = "lambda_function_payload.zip"
     function_name = "lambda_function_name"
-    role          = arn:aws:iam::236983045839:role/lambda-role
-    handler       = index.handdler
+    role          = "arn:aws:iam::236983045839:role/lambda-role"
+
+    handler       = "index.test"
 
     source_code_hash = data.archive_file.lambda.output_base64sha256
 
