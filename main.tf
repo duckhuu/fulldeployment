@@ -162,7 +162,24 @@ resource "aws_db_instance" "database" {
 
 }
 
+resource "aws_lambda_function" "lambda_function" {
+  # If the file is not in the current working directory you will need to include a
+  # path.module in the filename.
+    filename      = "lambda_function_payload.zip"
+    function_name = "lambda_function_name"
+    role          = arn:aws:iam::236983045839:role/lambda-role
+    handler       = index.handdler
 
+    source_code_hash = data.archive_file.lambda.output_base64sha256
+
+    runtime = "nodejs20.x"
+
+    environment {
+      variables = {
+        foo = "test"
+      }
+    }
+}
 
 //resource "aws_internet_gateway_attachment" "internet-gateway-attachment" {
 //    internet_gateway_id = aws_internet_gateway.internet-gateway.id
