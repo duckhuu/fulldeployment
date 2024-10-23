@@ -68,7 +68,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     - name: Create env by CloudFormation
-      run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv
+      run: aws cloudformation deploy --template-file cf.yaml --stack-name demoenv --capabilities CAPABILITY_NAMED_IAM
     - name: Get Stack EIP 
       run: aws cloudformation describe-stacks --region ap-southeast-2 --query 'Stacks[?StackName==`demoenv`][].Outputs[?OutputKey==`StackEIPGeneral`].OutputValue' --output text
     - name: Get Cloudformation Output EIP 
