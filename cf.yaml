@@ -271,7 +271,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Runtime: nodejs20.x
-      Role: !Ref LambdaRole
+      Role: !GetAtt LambdaRole.Arn
       Handler: index.handler
       Code:
         ZipFile: |
